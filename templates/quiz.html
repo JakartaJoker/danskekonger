@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz om Danske Konger</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+            color: #222;
+        }
+
+        .topbar {
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .question h3 {
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+
+        label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        button, .back-button {
+            display: inline-block;
+            margin-top: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover, .back-button:hover {
+            background: #1d4ed8;
+        }
+
+        .score {
+            margin-top: 20px;
+            padding: 15px;
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        Quiz om Danske Konger
+    </div>
+
+    <div class="quiz-container">
+        <form method="post">
+            {% for q in questions %}
+                {% set question_index = loop.index0 %}
+
+                <div class="question">
+                    <h3>{{ loop.index }}. {{ q.question }}</h3>
+
+                    {% for option in q.options %}
+                        <label>
+                            <input type="radio" name="q{{ question_index }}" value="{{ option }}">
+                            {{ option }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit">Se resultat</button>
+            <a class="back-button" href="/danskekonger">Tilbage</a>
+        </form>
+
+        {% if score is not none %}
+            <div class="score">
+                Du fik {{ score }} ud af {{ questions|length }} rigtige.
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
