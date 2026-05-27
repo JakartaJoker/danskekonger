@@ -4,65 +4,132 @@
     <meta charset="UTF-8">
     <title>Danske Konger</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f4f4f4;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f2f4f8;
+        color: #222;
+    }
 
-        h1 {
-            text-align: center;
-        }
+    .topbar {
+        background: #1e293b;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
 
+    .container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        height: calc(100vh - 100px);
+        box-sizing: border-box;
+    }
+
+    .panel {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .question-panel {
+        width: 33%;
+    }
+
+    .answer-panel {
+        width: 67%;
+    }
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #1e293b;
+    }
+
+    textarea {
+        flex-grow: 1;
+        resize: none;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: #2563eb;
+    }
+
+    .answer-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        background: #fafafa;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    button {
+        margin-top: 15px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .loading {
+        opacity: 0.6;
+        font-style: italic;
+    }
+
+    @media (max-width: 900px) {
         .container {
-            display: flex;
-            gap: 20px;
+            flex-direction: column;
+            height: auto;
         }
 
-        .question-panel {
-            width: 33%;
-        }
-
+        .question-panel,
         .answer-panel {
-            width: 67%;
-        }
-
-        textarea {
             width: 100%;
-            height: 250px;
-            font-size: 16px;
-            padding: 10px;
         }
 
+        textarea,
         .answer-box {
-            background: white;
             height: 250px;
-            overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            white-space: pre-wrap;
         }
-
-        button {
-            margin-top: 10px;
-            font-size: 16px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
-    <h1>Danske Konger</h1>
+    <div class="topbar">
+    Danske Konger
+    </div>
 
     <div class="container">
-        <div class="question-panel">
+        <div class="panel question-panel">
             <h3>Dit spørgsmål om danske konger?</h3>
             <textarea id="question"></textarea>
             <button onclick="askAI()">Spørg AI</button>
         </div>
 
-        <div class="answer-panel">
+        <div class="panel answer-panel">
             <h3>Svaret på dit spørgsmål!</h3>
             <div id="answer" class="answer-box"></div>
         </div>
@@ -81,8 +148,8 @@
             }
 
             questionBox.value = "";
+            answerBox.innerHTML = "<span class='loading'>AI tænker...</span>";
             answerBox.textContent = "";
-
             const formData = new FormData();
             formData.append("question", question);
 
