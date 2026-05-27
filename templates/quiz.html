@@ -105,7 +105,17 @@
             <div class="score">
                 Du fik {{ score }} ud af {{ questions|length }} rigtige.
             </div>
-        {% endif %}
+
+            <h2>Forklaringer</h2>
+
+            {% for q in questions %}
+                <div class="question">
+                    <h3>{{ loop.index }}. {{ q.question }}</h3>
+                    <p><strong>Rigtigt svar:</strong> {{ q.answer }}</p>
+                    <p>{{ q.explanation }}</p>
+                </div>
+            {% endfor %}
+         {% endif %}
     </div>
 
 </body>
