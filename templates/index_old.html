@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Danske Konger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .question-panel {
+            width: 33%;
+        }
+
+        .answer-panel {
+            width: 67%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .answer-box {
+            background: white;
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+
+        button {
+            margin-top: 10px;
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Danske Konger</h1>
+
+    <form method="post">
+        <div class="container">
+            <div class="question-panel">
+                <h3>Dit spørgsmål om danske konger?</h3>
+                <textarea name="question"></textarea>
+                <button type="submit">Spørg AI</button>
+            </div>
+
+            <div class="answer-panel">
+                <h3>Svaret på dit spørgsmål!</h3>
+                <div class="answer-box">{{ answer }}</div>
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>

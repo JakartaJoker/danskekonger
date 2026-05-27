@@ -55,20 +55,58 @@
 
     <h1>Danske Konger</h1>
 
-    <form method="post">
-        <div class="container">
-            <div class="question-panel">
-                <h3>Dit spørgsmål om danske konger?</h3>
-                <textarea name="question"></textarea>
-                <button type="submit">Spørg AI</button>
-            </div>
-
-            <div class="answer-panel">
-                <h3>Svaret på dit spørgsmål!</h3>
-                <div class="answer-box">{{ answer }}</div>
-            </div>
+    <div class="container">
+        <div class="question-panel">
+            <h3>Dit spørgsmål om danske konger?</h3>
+            <textarea id="question"></textarea>
+            <button onclick="askAI()">Spørg AI</button>
         </div>
-    </form>
+
+        <div class="answer-panel">
+            <h3>Svaret på dit spørgsmål!</h3>
+            <div id="answer" class="answer-box"></div>
+        </div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const questionBox = document.getElementById("question");
+            const answerBox = document.getElementById("answer");
+
+            const question = questionBox.value.trim();
+
+            if (!question) {
+                answerBox.textContent = "Skriv først et spørgsmål.";
+                return;
+            }
+
+            questionBox.value = "";
+            answerBox.textContent = "";
+
+            const formData = new FormData();
+            formData.append("question", question);
+
+            const response = await fetch("/stream", {
+                method: "POST",
+                body: formData
+            });
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder("utf-8");
+
+            while (true) {
+                const { value, done } = await reader.read();
+
+                if (done) {
+                    break;
+                }
+
+                const chunk = decoder.decode(value);
+                answerBox.textContent += chunk;
+                answerBox.scrollTop = answerBox.scrollHeight;
+            }
+        }
+    </script>
 
 </body>
 </html>

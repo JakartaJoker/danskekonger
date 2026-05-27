@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from openai import OpenAI
 import os
 
@@ -6,21 +6,25 @@ app = Flask(__name__)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.route("/", methods=["GET", "POST"])
-@app.route("/danskekonger", methods=["GET", "POST"])
+@app.route("/")
+@app.route("/danskekonger")
 def danskekonger():
-    answer = ""
+    return render_template("index.html")
 
-    if request.method == "POST":
-        question = request.form.get("question", "").strip()
 
-        if not question:
-            answer = "Skriv først et spørgsmål."
-        else:
-            try:
-                response = client.responses.create(
-                    model="gpt-4o-mini",
-                    input=f"""
+@app.route("/stream", methods=["POST"])
+def stream():
+    question = request.form.get("question", "").strip()
+
+    if not question:
+        return Response("Skriv først et spørgsmål.", mimetype="text/plain")
+
+    def generate():
+        try:
+            stream = client.responses.create(
+                model="gpt-4o-mini",
+                stream=True,
+                input=f"""
 Du er en hjælpsom historielærer.
 
 Brugeren må kun stille spørgsmål om danske konger.
@@ -31,14 +35,17 @@ Svar på dansk.
 Spørgsmål:
 {question}
 """
-                )
+            )
 
-                answer = response.output_text
+            for event in stream:
+                if event.type == "response.output_text.delta":
+                    yield event.delta
 
-            except Exception as e:
-                answer = f"Der opstod en fejl: {str(e)}"
+        except Exception as e:
+            yield f"\n\nDer opstod en fejl: {str(e)}"
 
-    return render_template("index.html", answer=answer)
+    return Response(generate(), mimetype="text/plain")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
