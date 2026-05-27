@@ -93,6 +93,24 @@
         background: #1d4ed8;
     }
 
+    .button-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .button-row button {
+        flex: 1;
+    }
+
+    .quiz-button {
+        background: #0f766e;
+    }
+
+    .quiz-button:hover {
+        background: #115e59;
+    }
+
     .loading {
         opacity: 0.6;
         font-style: italic;
@@ -126,9 +144,14 @@
         <div class="panel question-panel">
             <h3>Dit spørgsmål om danske konger?</h3>
             <textarea id="question"></textarea>
-            <button onclick="askAI()">Spørg AI</button>
-        </div>
+           <div class="button-row">
+               <button onclick="askAI()">Spørg AI</button>
 
+               <button class="quiz-button" onclick="window.location.href='/quiz'">
+                   Start Quiz
+               </button>
+           </div>
+     </div>
         <div class="panel answer-panel">
             <h3>Svaret på dit spørgsmål!</h3>
             <div id="answer" class="answer-box"></div>
